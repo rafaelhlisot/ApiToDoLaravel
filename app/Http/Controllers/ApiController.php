@@ -36,7 +36,10 @@ class ApiController extends Controller
     public function readalltodos(){
         $array = ['error' => ''];
 
-        $array['list'] = Todo::all();
+        $todos = Todo::simplePaginate(2);
+
+        $array['list'] = $todos->itens();
+        $array['current_page'] = $todos->currentPage();
 
         return $array;
     }
@@ -78,7 +81,7 @@ class ApiController extends Controller
             if($title) {
                 $todo->title = $title;
             }
-            if ($done) {
+            if ($done !== NULL) {
                 $todo->done = $done;
             }
 
@@ -91,7 +94,12 @@ class ApiController extends Controller
         return $array;
     }
 
-    public function deletetodo(){
+    public function deletetodo($id){
+        $array = ['error' => ''];
 
+        $todo = Todo::find($id);
+        $todo->delete();
+
+        return $array;
     }
 }
