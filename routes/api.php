@@ -23,16 +23,25 @@ Route::get('/ping', function(){
     ];
 });
 
+/*Route::get('/unauthenticated', function(){
+    return ['error' => 'usuário não logado'];
+})->name('login');
+
+Route::middleware('auth:sanctum')->get('/auth/logout', [AuthController::class, 'logout']);
+Route::post('/auth', [AuthController::class, 'login']);
+*/
+
+Route::post('/user', [AuthController::class, 'create']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::middleware('auth:api')->post('/auth/logout', [AuthController::class, 'logout']);
+
+//Route::middleware('auth:sanctum')->post('/todo', [ApiController::class, 'createtodo']);
+
 Route::get('/unauthenticated', function(){
     return ['error' => 'usuário não logado'];
 })->name('login');
 
-Route::post('/user', [AuthController::class, 'create']);
-Route::middleware('auth:sanctum')->get('/auth/logout', [AuthController::class, 'logout']);
-Route::post('/auth', [AuthController::class, 'login']);
-
-
-Route::middleware('auth:sanctum')->post('/todo', [ApiController::class, 'createtodo']);
+Route::middleware('auth:api')->post('/todo', [ApiController::class, 'createtodo']);
 Route::get('/todos', [ApiController::class, 'readalltodos']);
 Route::get('todo/{id}', [ApiController::class, 'readtodo']);
 Route::middleware('auth:sanctum')->put('todo/{id}', [ApiController::class, 'updatetodo']);

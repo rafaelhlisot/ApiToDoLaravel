@@ -39,7 +39,7 @@ class AuthController extends Controller
         return $array;
     }
 
-    public function login(Request $request) {
+    /*public function login(Request $request) {
         $array = ['error' => ''];
 
         $creds = $request->only('email', 'password');
@@ -64,6 +64,29 @@ class AuthController extends Controller
         $user = $request->user();
         $user->tokens()->delete();
 
+        return $array;
+    }*/
+
+    public function login(Request $request) {
+        $array = ['error' => ''];
+
+        $creds = $request->only('email', 'password');
+
+        $token = Auth::attempt($creds);
+
+        if($token) {
+            $array['token'] = $token;
+        } else {
+            $array['error'] = 'E-Mail e/ou senha incorretos';
+        }
+
+        return $array;
+    }
+
+    public function logout() {
+        $array = ['error' => ''];
+
+        Auth::logout();
         return $array;
     }
 }
